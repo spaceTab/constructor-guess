@@ -8,7 +8,7 @@ function Letter( letter ) {
     }
     this.show = function ( letter ) {
         if (this.hidden === false){
-           return this.letter
+           return this.letter;
         } else {
             return "_";
         }
