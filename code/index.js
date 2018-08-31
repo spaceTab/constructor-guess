@@ -50,7 +50,7 @@ const BEGIN = () => {
 
 const USR_PROMPT = () => {
     if (count < 10) {
-      // console.log(word.show());
+      console.log(word.show());
 
         inquirer.prompt([
             {
@@ -59,7 +59,6 @@ const USR_PROMPT = () => {
                 message: 'Pick one Letter & press ENTER:'
             }
         ]).then(data => {
-            console.log(word.show());
             CHECK_ANSWER(data);
         })
     } else {
@@ -76,8 +75,6 @@ const USR_PROMPT = () => {
 }
 
 const CHECK_ANSWER = (data) => {
-  //  word.guess(data.letter);
-
 
     if ((data.letter.length === 1)) {
         let checker = data.letter.toUpperCase();
@@ -85,7 +82,6 @@ const CHECK_ANSWER = (data) => {
         word.guess(checker);
 
         if (tmp === word.solved(data.letter)) {
-            console.log('Incorrect \n');
             count++;
             console.log(`Guesses Remaining:  ${10 - count}`);
         } 
