@@ -50,7 +50,8 @@ const BEGIN = () => {
 
 const USR_PROMPT = () => {
     if (count < 10) {
-      console.log(word.show());
+        
+        word.show();
 
         inquirer.prompt([
             {
