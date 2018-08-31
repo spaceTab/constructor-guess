@@ -14,3 +14,6 @@
 * Javascript
 * NPM install - Inquirer
 * NPM install - figlet 
+
+
+FYI -> As of Friday 4/37 game bugs haven't been worked out.
