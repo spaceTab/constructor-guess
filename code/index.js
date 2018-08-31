@@ -1,122 +1,142 @@
-const inq = require("inquirer");
-const chalk = require("chalk");
-const figlet = require("figlet");
 const Word = require("./word.js");
+const inquirer = require("inquirer");
+const figlet = require("figlet");
 
-
-//const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-const wordArr = [
-    'overflow',
-    'file',
-    'edit',
-    'selection',
-    'debug',
-    'compile',
-    'configuration'
+const wordBank = [
+    'gentoo',
+    'debian',
+    'ubuntu',
+    'fedora',
+    'arch',
+    'slackware',
+    'redstar'
 ]
 
-const logo = () => {
-    let log = console.log;
+let findIndx = 0;
+let chosen = '';
+let word = '';
+let count = 0; //user guesses
 
-    figlet('Welcome!', {
+
+const LOGO = () => {
+    let log = console.log;
+    figlet('Guess Dat Distro', {
         horizontalLayout: 'default',
         verticalLayout: 'default'
     }, function (err, data) {
         if (err) {
-            console.log(chalk`{bgWhite.red ERROR: ${err}}`);
+            log(`ERROR: ${err}}`);
             return;
         }
         log(data);
-        usr_prompt();
+        BEGIN();
     });
-
 }
 
- 
-let wordChosen = '';
-let usedWord = '';
+const BEGIN = () => {
 
-
-
-
-
-// Function for the prompt @ the start of game.
-const usr_prompt = () => {
-    //logo();
-    inq.prompt([
-        {
-            name: 'letter',
-            type: 'confirm',
-            message: 'lets hang . . . man'
-        }]).then((data) => {
-            new_game();
-        });
-}
-
-
-// const letter_guess = (data) => {
-//     if ((data.letter.length === 1) && /^[a-zA-Z]+$/.test(data.letter)) {
- 
-
-// }
-const new_game = ( /*letter*/) => {
-    //grabbing word from wordbank
-    let findIndx = Math.floor(Math.random() * wordArr.length);
-    let findWord = wordArr[findIndx];
-
-    word = new Word(findWord);
+    findIndx = Math.floor(Math.random() * wordBank.length);
+    chosen = wordBank[findIndx];
+    word = new Word(chosen);
     word.init_word();
-    word.show();
 
-    //gives a dynamic amount of guesses
-    //depending on the words length. 
-    let wordGuess = findWord.length + 5;
-    console.log(wordGuess);
+    if (findIndx > -1) {
+        wordBank.slice(findIndx, 1);
+    }
+    console.log('10 guessses');
 
-    letter_prompt();
+    USR_PROMPT();
 }
 
-const letter_prompt = () => {
-    inq.prompt([{
-        name: 'input',
-        type: 'input',
-        message: 'guess a letter'
-    }]).then((data) => {
-        word.guess(data.input);
-        word.show();
+const USR_PROMPT = () => {
+    if (count < 10) {
+        console.log(word.show() + '\n');
 
-        // if (data.input === 1) { 
-        //     word.show();
-        // } else {
-        //   // console.log('one letter at a time please');
-        //    // word.show();
-        // }
-        if (word.solved()) {
-            console.log('GREAT JOB!');
-            inq.prompt([
-                {
-                    type: 'input',
-                    name: 'again',
-                    message: 'would you like to play again? [yes/no]',
-                    choices: ['yes', 'no']
-                }
-            ]).then(data => {
-                if (data.again === 'yes') {
-                    new_game();
-                } else {
-                    figlet('GoodBye', {
-                        horizontalLayout: 'default',
-                        verticalLayout: 'default'
-                    }, function (error, data) {
-                        if (error) return console.log(`Error: ${error}`);
-                        console.log(data);
-                    })    
-                }
-            });
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'letter',
+                message: 'Pick one Letter & press ENTER:'
+            }
+        ]).then(data => {
+            CHECK_ANSWER(data);
+        })
+    } else {
+        console.log('You\'ve run out of guesses');
+        console.log('The correct word was' + chosen);
 
+        chosen   = '';
+        word     = ''
+        findIndx = 0;
+        count    = 0;
+
+        NEW_ROUND();
+    }
+}
+
+const CHECK_ANSWER = (data) => {
+    word.guess(data.letter);
+
+
+    if ((data.letter.length === 1)) {
+        let checker = data.letter.toUpperCase();
+        let tmp = word.solved(data.letter);
+        word.guess(checker);
+
+        if (tmp === word.guess(data.letter)) {
+            console.log('Incorrect \n');
+            count++;
+            console.log(`Guesses Remaining:  ${10 - count}`);
+            USR_PROMPT();
         } else {
-            letter_prompt();
+            CHECK_RIGHT();
         }
-    });
+    } else {
+        console.log('One Letter @ a time \n');
+        BEGIN();
+    }
 }
-logo();
+
+const CHECK_RIGHT = () => {
+    // console.log('correct \n');
+    if (word.solved()/*.replace(/ /g, "")*/) {
+        console.log('Correct Guess');
+
+        word   = '';
+        chosen = '';
+        select = 0;
+        count  = 0;
+
+        NEW_ROUND();
+    } else {
+        USR_PROMPT();
+    }
+}
+
+const NEW_ROUND = () => {
+    inquirer.prompt([
+        {
+            name: 'round',
+            type: 'list',
+            message: 'play again?',
+            choices: ['yes', 'no']
+        }
+    ]).then(data => {
+        if (data.round === 'yes') {
+            BEGIN();
+        } else {
+            figlet('Goodbye!', {
+                horizontalLayout: 'default',
+                verticalLayout: 'default'
+            }, function (err, data) {
+                if (err) {
+                    console.log(`ERROR: ${err}`);
+                    return;
+                }
+                console.log(`${data}`);
+            });
+        }
+    })
+}
+
+LOGO();
