@@ -13,9 +13,9 @@ const wordBank = [
 ]
 
 let findIndx = 0;
-let chosen = '';
-let word = '';
-let count = 0; //user guesses
+let chosen   = '';
+let word     = '';
+let count    = 0; //user guesses
 
 
 const LOGO = () => {
@@ -43,14 +43,14 @@ const BEGIN = () => {
     if (findIndx > -1) {
         wordBank.slice(findIndx, 1);
     }
-    console.log('10 guessses');
+    console.log('You have 10 guessses');
 
     USR_PROMPT();
 }
 
 const USR_PROMPT = () => {
     if (count < 10) {
-        console.log(word.show() + '\n');
+      // console.log(word.show());
 
         inquirer.prompt([
             {
@@ -59,6 +59,7 @@ const USR_PROMPT = () => {
                 message: 'Pick one Letter & press ENTER:'
             }
         ]).then(data => {
+            console.log(word.show());
             CHECK_ANSWER(data);
         })
     } else {
@@ -75,7 +76,7 @@ const USR_PROMPT = () => {
 }
 
 const CHECK_ANSWER = (data) => {
-    word.guess(data.letter);
+  //  word.guess(data.letter);
 
 
     if ((data.letter.length === 1)) {
@@ -83,10 +84,13 @@ const CHECK_ANSWER = (data) => {
         let tmp = word.solved(data.letter);
         word.guess(checker);
 
-        if (tmp === word.guess(data.letter)) {
+        if (tmp === word.solved(data.letter)) {
             console.log('Incorrect \n');
             count++;
             console.log(`Guesses Remaining:  ${10 - count}`);
+        } 
+        
+        if (tmp === word.guess(data.letter)){
             USR_PROMPT();
         } else {
             CHECK_RIGHT();
@@ -99,7 +103,7 @@ const CHECK_ANSWER = (data) => {
 
 const CHECK_RIGHT = () => {
     // console.log('correct \n');
-    if (word.solved()/*.replace(/ /g, "")*/) {
+    if (word.solved()) {
         console.log('Correct Guess');
 
         word   = '';

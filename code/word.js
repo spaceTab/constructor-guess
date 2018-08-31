@@ -4,10 +4,10 @@ const letter = require("./letter.js");
 function Word(word) {
 
     this.word = word;
-    console.log(word)
+   // console.log(word)
     this.letterBank = [];
     this.guessedLetters = [];
-    console.log(this.word)
+    //console.log(this.word)
     this.init_word = function () {
         this.letterBank = word.split('');
         // console.log(this.letterBank);
@@ -15,7 +15,7 @@ function Word(word) {
 
     this.show = function () {
         let str = '';
-        console.log(this.letterBank);
+       // console.log(this.letterBank);
         // console.log(this.guessedLetters);
         for (var i = 0; i < this.letterBank.length; i++) {
             if (this.guessedLetters.indexOf(this.letterBank[i]) == -1) {
@@ -43,7 +43,6 @@ function Word(word) {
         // console.log(this.guessedLetters)
         return is_solved;
     }
-
 };
 
 

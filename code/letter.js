@@ -13,7 +13,7 @@ function Letter( letter ) {
             return "_";
         }
     }
-    console.log(Letter());
+   // console.log(Letter());
 
     this.check = function(newGuess){
         if (this.letter.toUpperCase() === newGuess.toUpperCase()) letter.updater();
