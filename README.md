@@ -17,4 +17,5 @@
 * NPM install - figlet 
 
 
-FYI -> As of Friday 4/37 game bugs haven't been worked out.
+### Developed by **Jake Plaisted**
+###### On August of 2018
