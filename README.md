@@ -1,4 +1,5 @@
 # Constructor Word - Guess for Command line Interface
+![example](img/hangman.png)
 
 ### A node.js application that takes a random word from an array of words, and then user then guesses one letter at a time to guess the word!
 #### Theme: Linux distrobutions
